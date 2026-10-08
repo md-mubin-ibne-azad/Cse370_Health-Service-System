@@ -1,0 +1,113 @@
+-- Create the Users table
+CREATE TABLE Users (
+    User_id INT PRIMARY KEY,
+    Age INT,
+    Address VARCHAR(255),
+    Name VARCHAR(255),
+    Mobile VARCHAR(20),
+    User_email VARCHAR(255),
+    Password VARCHAR(255)
+);
+
+-- Create the Admin table
+CREATE TABLE Admin (
+    User_id INT PRIMARY KEY,
+    Admin_User_id INT,
+    FOREIGN KEY (User_id) REFERENCES Users(User_id),
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the Doctor table
+CREATE TABLE Doctor (
+    User_id INT PRIMARY KEY,
+    Fee DECIMAL(10, 2),
+    Specialiazation VARCHAR(255),
+    Admin_User_id INT,
+    FOREIGN KEY (User_id) REFERENCES Users(User_id),
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the Patient table
+CREATE TABLE Patient (
+    User_id INT PRIMARY KEY,
+    Disease VARCHAR(255),
+    Date DATE,
+    Appointment_id INT,
+    Ambulance_id INT,
+    BloodBank_id INT,
+    Admin_User_id INT,
+    FOREIGN KEY (User_id) REFERENCES Users(User_id),
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the Staff table
+CREATE TABLE Staff (
+    User_id INT PRIMARY KEY,
+    Salary DECIMAL(10, 2),
+    Supervisor_id INT,
+    Admin_User_id INT,
+    FOREIGN KEY (User_id) REFERENCES Users(User_id),
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the Others/Normal User table
+CREATE TABLE OthersNormalUser (
+    User_id INT PRIMARY KEY,
+    Bloodbank_id INT,
+    Admin_User_id INT,
+    FOREIGN KEY (User_id) REFERENCES Users(User_id),
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the Ambulance table
+CREATE TABLE Ambulance (
+    ID INT PRIMARY KEY,
+     Vehicle_number VARCHAR(50),
+    Driver_name VARCHAR(255),
+    Admin_User_id INT,
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the BloodBank table
+CREATE TABLE BloodBank (
+    ID INT PRIMARY KEY,
+    Blood_type VARCHAR(50),
+    Quantity INT,
+    Admin_User_id INT,
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+-- Create the Appointment table
+CREATE TABLE Appointment (
+    Appointment_id INT PRIMARY KEY,
+    Patient_id INT,
+    Doctor_id INT,
+    Date DATE,
+    Time TIME,
+    Admin_User_id INT,
+    FOREIGN KEY (Patient_id) REFERENCES Patient(User_id),
+    FOREIGN KEY (Doctor_id) REFERENCES Doctor(User_id),
+    FOREIGN KEY (Admin_User_id) REFERENCES Users(User_id)
+);
+
+CREATE TABLE Blood (
+  Blood_id INT PRIMARY KEY,
+  BloodBank_id INT,
+  Blood_type VARCHAR(255),
+  Bag_no INT,
+  FOREIGN KEY (BloodBank_id) REFERENCES BloodBank(BloodBank_id)
+);
+
+CREATE TABLE Hospital (
+  Hospital_id INT PRIMARY KEY,
+  Name VARCHAR(255),
+  Admin_User_id INT,
+  FOREIGN KEY (Admin _User_id) REFERENCES Admin(User_id)
+);
+
+CREATE TABLE Hospital_Location (
+  Hospital_id INT,
+  Location VARCHAR(255),
+  PRIMARY KEY (Hospital_id, Location),
+  FOREIGN KEY (Hospital_id) REFERENCES Hospital(Hospital_id)
+);
